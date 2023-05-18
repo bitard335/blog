@@ -1,0 +1,8 @@
+$headerBackgroundColor : #FFFF;
+
+.header {
+  display: flex;
+  background-color: $headerBackgroundColor;
+
+  &__title {}
+}

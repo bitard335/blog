@@ -1,0 +1,9 @@
+body, button, ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter";
+  background-color: #EBEEF3;
+}
