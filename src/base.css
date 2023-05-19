@@ -1,9 +1,23 @@
-body, button, ul {
+body, button, ul, p {
   margin: 0;
   padding: 0;
 }
 
+ul {
+  list-style: none;
+}
+
 body {
   font-family: "Inter";
+  font-weight: 400;
   background-color: #EBEEF3;
+}
+
+.drop-shadow {
+  filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.centered {
+  width: fit-content;
+  margin: 0 auto;
 }

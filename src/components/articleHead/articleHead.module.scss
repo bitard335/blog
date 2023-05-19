@@ -1,0 +1,51 @@
+$articleTitle : #1890FF;
+
+.article {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  width: 938px;
+  justify-content: space-between;
+
+  font-size: 12px;
+  line-height: 22px;
+
+  &__info {
+    margin-right: 85px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+
+    & div {
+      display: flex;
+    }
+  }
+
+  &__title{
+    color: $articleTitle; 
+    margin: 0;
+    font-size: 20px;
+    margin-right: 13px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &__tags {
+    display: flex;
+    gap: 8px;
+  }
+  &__tag{
+    border: 1px solid black;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  &__desc{
+    text-align: start;
+  }
+}
+
+.transparent {
+  color: rgba(0, 0, 0, 0.5);
+  border-color: rgba(0, 0, 0, 0.5);;
+}

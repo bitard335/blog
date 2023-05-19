@@ -1,0 +1,14 @@
+$articleBackColor : #FFFF;
+
+.articlePage {
+  margin: 0 auto;
+  width: fit-content;
+  text-align: start;
+  background-color: $articleBackColor;
+
+  padding: 15px 16px 24px 15px;
+
+  &__body{
+    margin-top: 25px;
+  }
+}

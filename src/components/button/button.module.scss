@@ -1,0 +1,44 @@
+.button {
+  height: 51px;
+  box-sizing: border-box;
+  margin-left: 19px;
+  padding: 0px 18px;
+  border: none;
+  background-color: transparent;
+
+  &__bordered {
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+  &__green {
+    border-color: #52C41A;
+    color: #52C41A;
+
+    &:hover{
+      background-color: #52C41A;
+      color: white;
+    }
+  }
+  &__red {
+    border-color: #F5222D;
+    color: #F5222D;
+
+    &:hover{
+      background-color: #F5222D;
+      color: white;
+    }
+  }
+  &__blue {
+    border-color: #1890FF;
+    color: #1890FF;
+
+        
+    &:hover{
+      background-color: #1890FF;
+      color: white;
+    }
+  }
+  &__small {
+    height: 32px;
+  }
+}

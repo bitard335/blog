@@ -1,0 +1,14 @@
+$articleBackColor : #FFFF;
+
+.articleList {
+  display: flex;
+  flex-direction: column;
+  row-gap: 26px;
+  list-style: none;
+
+  &__item{
+    background-color: #FFFF;
+    width: fit-content;
+    padding: 15px 16px 24px 15px;
+  }
+}

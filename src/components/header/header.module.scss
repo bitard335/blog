@@ -3,6 +3,20 @@ $headerBackgroundColor : #FFFF;
 .header {
   display: flex;
   background-color: $headerBackgroundColor;
+  padding: 6px 22px;
+  font-size: 18px;
+  box-sizing: border-box;
+  height: 80px;
+  align-items: center;
+  
+  margin-bottom: 26px;
 
-  &__title {}
+  &__title {
+    font-weight: 400;
+    font-size: 18px;
+  }
+
+  & a:first-of-type{
+    margin-left: auto;
+  }
 }
