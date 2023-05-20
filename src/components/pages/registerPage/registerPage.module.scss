@@ -1,6 +1,81 @@
+$formBackgroundColor : rgba(255, 255, 255, 1);
+$inputColor : #D9D9D9;
+$redirect : #8C8C8C;
+$buttonColor : #1890FF;
+$errorColor : rgba(245, 34, 45, 1);
+
 .registerPage {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 200px;
-  gap: 5px;
+  width: 385px;
+  padding: 32px 48px;
+  background-color: $formBackgroundColor;
+  text-align: start;
+
+  & label {
+    margin-bottom: 12px;
+    width: 100%;
+    
+    &:has(.registerPage__error) input {
+      border-color: $errorColor;
+    }
+  }
+  &__input {
+    box-sizing: border-box;
+    padding: 12px 8px;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: $inputColor;
+    color: rgba(0, 0, 0, 0.75);
+    font-size: 16px;
+    width: 100%;
+
+  }
+
+  &__inputName {
+    margin: 0;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+  &__title {
+    line-height: 28px;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 21px;
+  }
+  &__checkboxLabel{
+    margin-top: 11px;
+    padding-top: 8px;
+    border-top: 1px solid $inputColor;
+  }
+  &__submit {
+    transition-duration: 500ms;
+    border: none;
+    height: 40px;
+    border-radius: 4px;
+    background-color: $buttonColor;
+    color: white;
+    margin-top: 21px;
+    margin-bottom: 8px;
+    cursor: pointer;
+
+    &:hover{
+      background-color: #116cc0;
+    }
+  }
+
+  &__error {
+    color: $errorColor;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  &__redirect{
+    font-size: 12px;
+    text-align: center;
+    color: $redirect;
+  }
+  
+
 }

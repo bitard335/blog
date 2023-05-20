@@ -29,7 +29,7 @@ const userReducer = createSlice({
     user: undefined,
     isAuth: false,
     isError: false,
-    errors: {},
+    formErrors: {},
   },
   reducers: {
     authUser(state, action) {
@@ -42,7 +42,7 @@ const userReducer = createSlice({
     builder
       .addCase(fetchAuth.pending, (state) => {
         state.isLoading = true;
-        state.errors = {};
+        state.formErrors = {};
         state.isError = false;
       })
       .addCase(fetchAuth.fulfilled, (state) => {
@@ -52,11 +52,11 @@ const userReducer = createSlice({
         state.isLoading = false;
         state.isError = true;
         console.log(action);
-        state.errors = action.payload;
+        state.formErrors = action.payload;
       });
   },
 });
 
-export const { authUser, setError } = userReducer.actions;
+export const { authUser } = userReducer.actions;
 
 export default userReducer.reducer;

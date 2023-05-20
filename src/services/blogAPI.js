@@ -5,7 +5,6 @@ export default class BlogAPI {
 
   registerUser = async (user) => {
     const body = JSON.stringify({ user: user });
-    console.log(body);
 
     try {
       const path = this.url + '/users';
@@ -23,11 +22,15 @@ export default class BlogAPI {
   };
 
   loginUser = async (user) => {
+    const body = JSON.stringify({ user: user });
     try {
       const path = this.url + '/users/login';
       const response = await fetch(path, {
         method: 'POST',
-        body: JSON.stringify({ user: user }),
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: body,
       });
       return response;
     } catch (err) {

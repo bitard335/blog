@@ -1,45 +1,74 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { fetchAuth } from '../../../store/reducers/userReducer';
 
 import cl from './loginPage.module.scss';
 
 const LoginPage = () => {
+  const { formErrors } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { isAuth } = useSelector((state) => state.user);
-  const [email, setEmail] = useState('');
-  const [pass, setPass] = useState('');
-
-  const { register, handleSubmit } = useForm();
-
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    setError,
+    formState: { errors },
+  } = useForm({
+    mode: 'onChange',
+  });
   const submitHandler = (data) => {
-    console.log({ data });
-    dispatch(fetchAuth({ type: 'login', body: data }));
-    setEmail('');
-    setPass('');
+    dispatch(fetchAuth({ type: 'register', body: data }));
+    reset();
   };
+
+  useEffect(() => {
+    Object.keys(formErrors).forEach((key) => {
+      setError(key, { message: `${key} ${formErrors[key]}` });
+    });
+  }, [formErrors]);
+
+  const errorPlug = (name) =>
+    errors[name] ? <div className={cl.loginPage__error}>{errors[name]?.message}</div> : null;
 
   return (
     <form className={cl.loginPage + ' centered'} onSubmit={handleSubmit(submitHandler)}>
-      <input
-        onInput={(event) => {
-          setEmail(event.target.value);
-        }}
-        value={email}
-        {...register('email', { required: true })}
-      />
-      <input
-        onInput={(event) => {
-          setPass(event.target.value);
-        }}
-        value={pass}
-        {...register('password', { required: true })}
-      />
-      <button type="submit" className={cl.loginPage__submit}>
-        ЛОГИН
+      <h2 className={cl.loginPage__title}>Sign In</h2>
+      <label>
+        <h6 className={cl.loginPage__inputName}>Email address</h6>
+        <input
+          className={cl.loginPage__input}
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Email is invalid',
+            },
+          })}
+        />
+        {errorPlug('email')}
+      </label>
+      <label>
+        <h6 className={cl.loginPage__inputName}>Password</h6>
+        <input
+          className={cl.loginPage__input}
+          {...register('password', {
+            required: 'Password is required',
+          })}
+        />
+        {errorPlug('password')}
+      </label>
+
+      <button className={cl.loginPage__submit} type="submit">
+        Create
       </button>
+
+      <div className={cl.loginPage__redirect}>
+        Doesnt have an account? <Link to="/register">Sign up</Link>
+      </div>
     </form>
   );
 };
