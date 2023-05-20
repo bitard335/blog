@@ -16,7 +16,16 @@ $headerBackgroundColor : #FFFF;
     font-size: 18px;
   }
 
-  & a:first-of-type{
-    margin-left: auto;
+  & a {
+    text-decoration: none;
+    
+    &:visited {
+      color: black;
+    }
+
+    &:nth-child(2){
+      margin-left: auto;
+    }
   }
+
 }

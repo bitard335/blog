@@ -1,16 +1,37 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { logOut } from '../../store/reducers/userReducer';
 import Button from '../button/button';
+import Author from '../author/author';
 
 import cl from './header.module.scss';
 
 const Header = () => {
-  const { isAuth } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  return (
-    <header className={cl.header}>
-      <h6 className={cl.header__title}>Realworld Blog</h6>
+  const { isAuth, user } = useSelector((state) => state.user);
+  const image = user?.image || 'https://avatars.mds.yandex.net/get-images-cbir/2375609/Xs7Iwv-aOKDn8SfMBpHxjg2184/ocr';
+
+  const userAuth = isAuth ? (
+    <>
+      <Link to={'/createArticle'}>
+        <Button green small bordered>
+          create Article
+        </Button>
+      </Link>
+      <Author image={image} {...user} />
+      <Button
+        bordered
+        onClick={() => {
+          dispatch(logOut());
+        }}
+      >
+        Log Out
+      </Button>
+    </>
+  ) : (
+    <>
       <Link to={'/login'}>
         <Button>Sign in</Button>
       </Link>
@@ -19,6 +40,15 @@ const Header = () => {
           Sign up
         </Button>
       </Link>
+    </>
+  );
+
+  return (
+    <header className={cl.header}>
+      <Link to={'/list'}>
+        <h6 className={cl.header__title}>Realworld Blog</h6>
+      </Link>
+      {userAuth}
     </header>
   );
 };

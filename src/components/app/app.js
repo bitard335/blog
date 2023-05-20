@@ -6,6 +6,9 @@ import ArticleList from '../pages/articleList/articleList';
 import LoginPage from '../pages/loginPage/loginPage';
 import RegisterPage from '../pages/registerPage/registerPage';
 import RedirectComponent from '../../hoc/redirectComponent';
+import CreateArticlePage from '../pages/createArticlePage/createArticlePage';
+import EditProfilePage from '../pages/editProfilePage/editProfilePage';
+import EditArticlePage from '../pages/editArticlePage/editArticlePage';
 
 import cl from './app.module.scss';
 
@@ -17,6 +20,7 @@ const App = () => {
       <Routes>
         <Route path="/list" element={<ArticleList />} />
         <Route path="/list/:slug" element={<ArticlePage />} />
+        <Route path="/list/:slug/edit" element={<EditArticlePage />} />
         <Route
           path="/login"
           element={
@@ -33,6 +37,8 @@ const App = () => {
             </RedirectComponent>
           }
         />
+        <Route path="/editProfile" element={<EditProfilePage />} />
+        <Route path="/createArticle" element={<CreateArticlePage />} />
         <Route path="*" Component={() => <h2>Page does not found</h2>} />
       </Routes>
     </div>

@@ -51,6 +51,22 @@ export default class BlogAPI {
     }
   };
 
+  removeArticle = async (slug, token) => {
+    try {
+      const path = this.url + `/articles/${slug}`;
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'DELETE',
+        headers: { Authorization: auth },
+      });
+      if (!response.ok) throw new Error();
+
+      const json = await response.json();
+      return json;
+    } catch (err) {
+      throw new Error('Ошибка удаления');
+    }
+  };
   getArticle = async (slug) => {
     try {
       const path = this.url + `/articles/${slug}`;
@@ -61,6 +77,43 @@ export default class BlogAPI {
       return json;
     } catch (err) {
       throw new Error('Ошибка получения постов');
+    }
+  };
+
+  putUserProfile = async (token, user) => {
+    const body = JSON.stringify({ user: user });
+    console.log(body);
+
+    try {
+      const path = this.url + '/user';
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: auth },
+        body: body,
+      });
+
+      return response;
+    } catch (err) {
+      throw new Error('Ошибка обновления профиля');
+    }
+  };
+
+  createArticle = async (article, token) => {
+    const body = JSON.stringify({ article: article });
+
+    try {
+      const path = this.url + '/articles';
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: auth },
+        body: body,
+      });
+
+      return response;
+    } catch (err) {
+      throw new Error('Ошибка создания поста');
     }
   };
 }

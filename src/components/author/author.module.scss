@@ -2,14 +2,26 @@
   display: flex;
   flex-direction: row;
   gap: 12px;
+  justify-content: flex-end;
   
   &__name{
     white-space: nowrap;
+    margin-left: 26px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 18px;
   }
 
+  &__userInfo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
   &__image {
     width: 46px;
     height: 46px;
     border-radius: 50%;
+  }
+  &__date{
+    margin-bottom: 30px;
   }
 }

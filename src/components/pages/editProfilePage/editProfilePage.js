@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm, Controller } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import { Checkbox, Spin } from 'antd';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 import { fetchAuth } from '../../../store/reducers/userReducer';
 import cl from '../../../formModule/formPage.module.scss';
 
-const RegisterPage = () => {
-  const { formErrors, isLoading } = useSelector((state) => state.user);
+const EditProfilePage = () => {
+  const { formErrors, isLoading, user, status } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigator = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -22,15 +24,20 @@ const RegisterPage = () => {
   });
 
   const submitHandler = (data) => {
-    dispatch(fetchAuth({ type: 'register', body: data }));
+    dispatch(fetchAuth({ token: user.token, type: 'edit', body: data }));
     reset();
   };
 
   useEffect(() => {
-    Object.keys(formErrors).forEach((key) => {
-      setError(key, { message: `${key} ${formErrors[key]}` });
-    });
+    if (formErrors) {
+      Object.keys(formErrors).forEach((key) => {
+        setError(key, { message: `${key} ${formErrors[key]}` });
+      });
+    }
   }, [formErrors]);
+  useEffect(() => {
+    if (status === 'fulfilled') navigator('/list');
+  }, [status]);
 
   const errorPlug = (name) => (errors[name] ? <div className={cl.formPage__error}>{errors[name]?.message}</div> : null);
 
@@ -43,21 +50,7 @@ const RegisterPage = () => {
 
   return (
     <form className={cl.formPage + ' centered'} onSubmit={handleSubmit(submitHandler)}>
-      <h2 className={cl.formPage__title}>Create new account</h2>
-      <label>
-        <h6 className={cl.formPage__inputName}>Email address</h6>
-        <input
-          className={cl.formPage__input}
-          {...register('email', {
-            required: 'Email is required',
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: 'Email is invalid',
-            },
-          })}
-        />
-        {errorPlug('email')}
-      </label>
+      <h2 className={cl.formPage__title}>Edit Profile</h2>
       <label>
         <h6 className={cl.formPage__inputName}>Username</h6>
         <input
@@ -81,7 +74,21 @@ const RegisterPage = () => {
         {errorPlug('username')}
       </label>
       <label>
-        <h6 className={cl.formPage__inputName}>Password</h6>
+        <h6 className={cl.formPage__inputName}>Email address</h6>
+        <input
+          className={cl.formPage__input}
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Email is invalid',
+            },
+          })}
+        />
+        {errorPlug('email')}
+      </label>
+      <label>
+        <h6 className={cl.formPage__inputName}>New password</h6>
         <input
           className={cl.formPage__input}
           {...register('password', {
@@ -99,41 +106,21 @@ const RegisterPage = () => {
         {errorPlug('password')}
       </label>
       <label>
-        <h6 className={cl.formPage__inputName}>Repeat password</h6>
+        <h6 className={cl.formPage__inputName}>Avatar image (url)</h6>
         <input
           className={cl.formPage__input}
-          {...register('repeat-password', {
-            required: 'Repeat your password',
-            validate: (value, formValues) => value === formValues.password || 'Passwords are incorrect',
+          {...register('image', {
+            required: 'Image is required',
           })}
         />
-        {errorPlug('repeat-password')}
-      </label>
-      <label className={cl.formPage__checkboxLabel}>
-        <Controller
-          name="checkbox"
-          control={control}
-          rules={{ required: 'Checkbox is required' }}
-          render={({ field }) => {
-            return (
-              <Checkbox {...field} checked={field.value}>
-                <p>I agree to the processing of my personal information</p>
-              </Checkbox>
-            );
-          }}
-        />
-        {errorPlug('checkbox')}
+        {errorPlug('image')}
       </label>
 
       <button className={cl.formPage__submit} type="submit">
-        Create
+        Edit
       </button>
-
-      <div className={cl.formPage__redirect}>
-        Already have an account? <Link to="/login">Sign In</Link>
-      </div>
     </form>
   );
 };
 
-export default RegisterPage;
+export default EditProfilePage;
