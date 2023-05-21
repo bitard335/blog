@@ -1,1 +1,1 @@
-Ссылка на выгруженное приложение : https://blog-ll02wyd0j-bitard335.vercel.app/articles
+Ссылка на выгруженное приложение : https://blog-amber-one.vercel.app/articles
