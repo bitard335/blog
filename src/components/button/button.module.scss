@@ -1,4 +1,6 @@
 .button {
+  transition-duration: 400ms;
+
   height: 51px;
   box-sizing: border-box;
   margin-left: 19px;
@@ -6,6 +8,11 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+
+  &:hover{
+    background-color: black;
+    color: white;
+  }
   
 
   &__bordered {

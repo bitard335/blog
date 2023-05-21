@@ -11,19 +11,7 @@ import Button from '../button/button';
 import cl from './articleHead.module.scss';
 
 const ArticleHead = (props) => {
-  const {
-    transparent,
-    description,
-    createdAt,
-    author,
-    favoritesCount,
-    title,
-    tagList,
-    slug,
-    favorited,
-    selectedPage,
-    userIsAuthor,
-  } = props;
+  const { transparent, description, createdAt, author, title, tagList, slug, selectedPage, userIsAuthor } = props;
 
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -60,7 +48,7 @@ const ArticleHead = (props) => {
           <h2 className={cl.article__title} onClick={onNavigate}>
             {title}
           </h2>
-          <Like favoritesCount={favoritesCount} slug={slug} favorited={favorited} />
+          <Like slug={slug} />
         </div>
         <div>
           <ul className={cl.article__tags}>{tagElements}</ul>

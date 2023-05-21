@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { Spin } from 'antd';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { fetchAuth } from '../../../store/reducers/userReducer';
 import cl from '../../../formModule/formPage.module.scss';
