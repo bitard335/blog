@@ -2,20 +2,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { fetchAuth } from '../../../store/reducers/userReducer';
 import cl from '../../../formModule/formPage.module.scss';
 
 const EditProfilePage = () => {
-  const { formErrors, isLoading, user, status } = useSelector((state) => state.user);
+  const { formErrors, isLoading, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigator = useNavigate();
 
   const {
     register,
     handleSubmit,
-    control,
     reset,
     setError,
     formState: { errors },
@@ -24,7 +23,9 @@ const EditProfilePage = () => {
   });
 
   const submitHandler = (data) => {
-    dispatch(fetchAuth({ token: user.token, type: 'edit', body: data }));
+    dispatch(fetchAuth({ token: user.token, type: 'edit', body: data })).then((response) => {
+      if (!response.error) navigator('/articles');
+    });
     reset();
   };
 
@@ -35,9 +36,6 @@ const EditProfilePage = () => {
       });
     }
   }, [formErrors]);
-  useEffect(() => {
-    if (status === 'fulfilled') navigator('/list');
-  }, [status]);
 
   const errorPlug = (name) => (errors[name] ? <div className={cl.formPage__error}>{errors[name]?.message}</div> : null);
 

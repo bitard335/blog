@@ -9,7 +9,7 @@ export const fetchAuth = createAsyncThunk(
     let json;
 
     try {
-      const token = getState().user.token;
+      const token = getState().user.user.token;
       const userBody = payload.body;
 
       if (payload.type === 'login') {
@@ -25,7 +25,6 @@ export const fetchAuth = createAsyncThunk(
       const user = token ? { ...json.user, token: token } : json.user;
       dispatch(authUser({ user: user }));
     } catch (err) {
-      console.log(err);
       return rejectWithValue(json.errors);
     }
   }
@@ -34,12 +33,7 @@ export const fetchAuth = createAsyncThunk(
 const userReducer = createSlice({
   name: 'user',
   initialState: {
-    user: {
-      username: 'sus',
-      email: 'sus@mail.com',
-      token:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NjhmYjliNjBjNjc1MWIwMGI3Nzg2OCIsInVzZXJuYW1lIjoic3VzIiwiZXhwIjoxNjg5Nzg1NzU1LCJpYXQiOjE2ODQ2MDE3NTV9.pNQtN6Wwk372lb2wMpDvGfJhsAyZR65RkErXC9A7ZDQ',
-    },
+    user: {},
     isAuth: true,
     isLoading: false,
     isError: false,
@@ -72,7 +66,6 @@ const userReducer = createSlice({
         state.status = 'rejected';
         state.isLoading = false;
         state.isError = true;
-        console.log(action);
         state.formErrors = action.payload;
       });
   },

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Popconfirm } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { removeArticle } from '../../store/reducers/articlesReducer';
+import { article } from '../../store/reducers/articlesReducer';
 import Like from '../like/like';
 import Author from '../author/author';
 import Button from '../button/button';
@@ -44,8 +44,9 @@ const ArticleHead = (props) => {
   });
 
   const deleteHandler = () => {
-    dispatch(removeArticle({ slug: slug, token: user.token }));
-    navigator('/list');
+    dispatch(article({ type: 'delete', slug: slug, token: user.token })).then((response) => {
+      navigator('/articles');
+    });
   };
 
   const onNavigate = (event) => {
@@ -86,7 +87,7 @@ const ArticleHead = (props) => {
               green
               small
               onClick={() => {
-                navigator('edit');
+                navigator('edit', { state: props });
               }}
             >
               Edit

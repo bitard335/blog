@@ -60,17 +60,62 @@ export default class BlogAPI {
         headers: { Authorization: auth },
       });
       if (!response.ok) throw new Error();
-
-      const json = await response.json();
-      return json;
     } catch (err) {
       throw new Error('Ошибка удаления');
     }
   };
-  getArticle = async (slug) => {
+  editArticle = async (slug, article, token) => {
+    const body = JSON.stringify({ article: article });
     try {
       const path = this.url + `/articles/${slug}`;
-      const response = await fetch(path);
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json;charset=utf-8', Authorization: auth },
+        body: body,
+      });
+      if (!response.ok) throw new Error();
+      return response;
+    } catch (err) {
+      throw new Error('Ошибка редактирования');
+    }
+  };
+  addLike = async (slug, token) => {
+    try {
+      const path = this.url + `/articles/${slug}/favorite`;
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'POST',
+        headers: { Authorization: auth },
+      });
+      const json = await response.json();
+      return json;
+    } catch (err) {
+      throw new Error('Ошибка лайка');
+    }
+  };
+  removeLike = async (slug, token) => {
+    try {
+      const path = this.url + `/articles/${slug}/favorite`;
+      const auth = 'Bearer ' + token;
+      const response = await fetch(path, {
+        method: 'DELETE',
+        headers: { Authorization: auth },
+      });
+      const json = await response.json();
+      return json;
+    } catch (err) {
+      throw new Error('Ошибка лайка');
+    }
+  };
+
+  getArticle = async (slug, token) => {
+    const auth = token ? 'Bearer ' + token : null;
+    try {
+      const path = this.url + `/articles/${slug}`;
+      const response = await fetch(path, {
+        headers: { Authorization: auth },
+      });
       if (!response.ok) throw new Error();
 
       const json = await response.json();
@@ -82,7 +127,6 @@ export default class BlogAPI {
 
   putUserProfile = async (token, user) => {
     const body = JSON.stringify({ user: user });
-    console.log(body);
 
     try {
       const path = this.url + '/user';

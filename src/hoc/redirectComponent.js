@@ -5,7 +5,7 @@ const RedirectComponent = ({ children }) => {
   const { isAuth } = useSelector((state) => state.user);
 
   if (isAuth) {
-    return <Navigate to="/list" replace={true} />;
+    return <Navigate to="/articles" replace={true} />;
   }
   return <>{children}</>;
 };

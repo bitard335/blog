@@ -2,7 +2,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Spin } from 'antd';
+import { Spin, Alert } from 'antd';
 
 import { blogAPI } from '../../../services/blogAPI';
 import ArticleHead from '../../articleHead/articleHead';
@@ -23,7 +23,6 @@ const ArticlePage = () => {
     blogAPI
       .getArticle(slug)
       .then((response) => {
-        console.log(response);
         setArticle(response.article);
         setStatus('fulfilled');
       })
@@ -31,6 +30,10 @@ const ArticlePage = () => {
         setStatus('rejected');
       });
   }, [slug]);
+
+  if (status === 'rejected') {
+    return <Alert type="error" message="Такого поста не существует" />;
+  }
 
   const loading =
     status === 'loading' ? (

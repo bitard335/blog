@@ -2,47 +2,30 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { blogAPI } from '../../services/blogAPI';
 
-export const removeArticle = createAsyncThunk('articles/addArticle', async (payload, { rejectWithValue }) => {
-  let json;
-
-  try {
-    console.log('создание');
-    const slug = payload.slug;
-    const token = payload.token;
-
-    json = await blogAPI.removeArticle(slug, token);
-  } catch (err) {
-    console.log(err);
-    return rejectWithValue(json.errors);
-  }
-});
-
-export const addArticle = createAsyncThunk('articles/addArticle', async (payload, { rejectWithValue }) => {
+export const article = createAsyncThunk('articles/articleAction', async (payload, { rejectWithValue }) => {
   let response;
   let json;
 
   try {
-    console.log('создание');
     const body = payload.body;
     const token = payload.token;
-    console.log(token);
+    const type = payload.type;
+    const slug = payload?.slug;
 
-    if (payload.type === 'add') {
-      response = await blogAPI.createArticle(body, token);
-    } else {
-      response = await blogAPI.createArticle(body, token);
-    }
-    json = await response.json();
-    if (!response.ok) throw new Error(`${payload.type} error`);
+    if (payload.type === 'create') response = await blogAPI.createArticle(body, token);
+    else if (payload.type === 'delete') await blogAPI.removeArticle(slug, token);
+    else if (payload.type === 'edit') response = await blogAPI.editArticle(slug, body, token);
+
+    json = await response?.json();
+    if (response && !response.ok) throw new Error(`${payload.type} error`);
+    return json;
   } catch (err) {
-    console.log(err);
     return rejectWithValue(json.errors);
   }
 });
 
 export const fetchArticles = createAsyncThunk('articles/fetchArticles', async (payload, { dispatch }) => {
   try {
-    console.log('вызов');
     const { page, limit } = payload;
 
     const offset = (page - 1) * limit;
@@ -52,7 +35,6 @@ export const fetchArticles = createAsyncThunk('articles/fetchArticles', async (p
     dispatch(setArticles({ articles: response.articles }));
     dispatch(setTotalCount({ count: totalCount }));
   } catch (err) {
-    console.log(err);
     dispatch(setError());
   }
 });
@@ -87,21 +69,6 @@ const articlesReducer = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
-        state.status = 'rejected';
-        state.isLoading = false;
-        state.isError = true;
-        state.errors = action.payload;
-      })
-      .addCase(addArticle.pending, (state) => {
-        state.status = 'pending';
-        state.isLoading = true;
-        state.isError = false;
-      })
-      .addCase(addArticle.fulfilled, (state) => {
-        state.status = 'fulfilled';
-        state.isLoading = false;
-      })
-      .addCase(addArticle.rejected, (state, action) => {
         state.status = 'rejected';
         state.isLoading = false;
         state.isError = true;

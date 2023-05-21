@@ -19,6 +19,9 @@ $headerBackgroundColor : #FFFF;
   & a {
     text-decoration: none;
     
+    &:link {
+      color: black;
+    }
     &:visited {
       color: black;
     }

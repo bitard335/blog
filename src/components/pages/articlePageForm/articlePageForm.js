@@ -2,25 +2,32 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { addArticle } from '../../../store/reducers/articlesReducer';
+import { article } from '../../../store/reducers/articlesReducer';
 import Button from '../../button/button';
 import cl from '../../../formModule/formPage.module.scss';
 
-const EditArticlePage = () => {
-  const { formErrors, isLoading, user, status } = useSelector((state) => state.articles);
+export const ArticlePageForm = ({ type, placeholders, slug }) => {
+  const { user } = useSelector((state) => state.user);
   const [tagsState, setTags] = useState([]);
-  const [currentStatus, setCurrentStatus] = useState('pending');
+  const [createStatus, setCreateStatus] = useState();
   const tagInput = useRef();
   const navigator = useNavigate();
+
+  useEffect(() => {
+    const defaultTags = placeholders?.tagList
+      ? placeholders.tagList.map((tag, index) => ({ tag: tag, id: index }))
+      : [];
+
+    setTags(defaultTags);
+  }, [placeholders?.tagList]);
 
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     reset,
-    setError,
     formState: { errors },
   } = useForm({
     mode: 'onChange',
@@ -42,30 +49,20 @@ const EditArticlePage = () => {
   const submitHandler = (data) => {
     const tags = tagsState.map((tag) => tag.tag);
     const dataWithTags = { ...data, tagList: tags };
-    dispatch(addArticle({ token: user.token, body: dataWithTags }));
+    setCreateStatus('loading');
+    dispatch(article({ type: type, token: user?.token, slug: slug, body: dataWithTags }))
+      .then((response) => {
+        const slug = response.payload?.article?.slug;
+
+        setCreateStatus('fulfilled');
+        navigator('/articles/' + slug);
+      })
+      .catch((err) => {
+        setCreateStatus('rejected');
+      });
     reset();
     setTags([]);
   };
-
-  useEffect(() => {
-    setCurrentStatus(status);
-  }, [status]);
-
-  useEffect(() => {
-    if (formErrors)
-      Object.keys(formErrors).forEach((key) => {
-        setError(key, { message: `${key} ${formErrors[key]}` });
-      });
-  }, [formErrors]);
-
-  if (status === 'fulfilled') navigator(-1);
-
-  if (isLoading)
-    return (
-      <div className={cl.formPage + ' centered'}>
-        <Spin size="large" className="centered" />
-      </div>
-    );
 
   const addedTags = tagsState.map((tagElem, index) => {
     const { tag } = tagElem;
@@ -88,29 +85,45 @@ const EditArticlePage = () => {
     );
   });
 
+  if (createStatus === 'loading') {
+    return (
+      <form className={cl.formPage + ' centered'} style={{ width: 938 }} onSubmit={handleSubmit(submitHandler)}>
+        <Spin size="large" />
+      </form>
+    );
+  }
   const errorPlug = (name) => (errors[name] ? <div className={cl.formPage__error}>{errors[name]?.message}</div> : null);
 
-  if (currentStatus === 'fulfilled') navigator(-1);
+  const formTitle = type === 'edit' ? 'Edit Article' : 'Create new Article';
 
   return (
     <form className={cl.formPage + ' centered'} style={{ width: 938 }} onSubmit={handleSubmit(submitHandler)}>
-      <h2 className={cl.formPage__title}>Create new Article</h2>
+      <h2 className={cl.formPage__title}>{formTitle}</h2>
       <label>
         <h6 className={cl.formPage__inputName}>Title</h6>
-        <input className={cl.formPage__input} {...register('title', { required: 'Is required' })} />
+        <input
+          className={cl.formPage__input}
+          defaultValue={placeholders?.title}
+          {...register('title', { required: 'Title is required' })}
+        />
         {errorPlug('title')}
       </label>
       <label>
         <h6 className={cl.formPage__inputName}>Short Description</h6>
-        <input className={cl.formPage__input} {...register('description', { required: 'Is required' })} />
+        <input
+          className={cl.formPage__input}
+          defaultValue={placeholders?.description}
+          {...register('description', { required: 'Description is required' })}
+        />
         {errorPlug('description')}
       </label>
       <label>
         <h6 className={cl.formPage__inputName}>Text</h6>
         <textarea
+          defaultValue={placeholders?.body}
           className={cl.formPage__input}
           style={{ height: 168 }}
-          {...register('body', { required: 'Is required' })}
+          {...register('body', { required: 'Text is required' })}
         />
         {errorPlug('body')}
       </label>
@@ -133,4 +146,11 @@ const EditArticlePage = () => {
   );
 };
 
-export default EditArticlePage;
+export default ArticlePageForm;
+export const CreateArticlePage = () => <ArticlePageForm type="create" />;
+export const EditArticlePage = () => {
+  const { slug } = useParams();
+  const location = useLocation();
+
+  return <ArticlePageForm type="edit" slug={slug} placeholders={location?.state} />;
+};

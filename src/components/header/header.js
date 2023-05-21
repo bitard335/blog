@@ -20,7 +20,7 @@ const Header = () => {
           create Article
         </Button>
       </Link>
-      <Author image={image} {...user} />
+      <Author image={image} {...user} inHeader />
       <Button
         bordered
         onClick={() => {
@@ -45,7 +45,7 @@ const Header = () => {
 
   return (
     <header className={cl.header}>
-      <Link to={'/list'}>
+      <Link to={'/articles'}>
         <h6 className={cl.header__title}>Realworld Blog</h6>
       </Link>
       {userAuth}
