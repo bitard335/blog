@@ -10,7 +10,7 @@ const Like = ({ slug }) => {
 
   const { isAuth, user } = useSelector((state) => state.user);
 
-  const [likesCount, setLikesCount] = useState();
+  const [likesCount, setLikesCount] = useState(0);
   const [isLiked, setLike] = useState(false);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const Like = ({ slug }) => {
         setLike(isFavorited);
       });
     }
-  }, [user]);
+  }, [user, slug]);
 
   const onLikeHandler = (event) => {
     if (isAuth) {
