@@ -55,10 +55,10 @@ const ArticleHead = (props) => {
         </div>
         <main className={previewTextClass}>{description}</main>
       </div>
-      <div>
+      <div className={cl.article__userBlock}>
         <Author image={img} createdAt={createdAt} {...author} />
         {userIsAuthor ? (
-          <>
+          <div>
             <Popconfirm
               okText="Yes"
               cancelText="No"
@@ -80,7 +80,7 @@ const ArticleHead = (props) => {
             >
               Edit
             </Button>
-          </>
+          </div>
         ) : null}
       </div>
     </div>

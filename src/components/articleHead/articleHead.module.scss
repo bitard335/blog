@@ -10,6 +10,12 @@ $articleTitle : #1890FF;
   font-size: 12px;
   line-height: 22px;
 
+  &__userBlock {
+    display: flex;
+    flex-direction: column;
+    text-align: end;
+  }
+
   &__info {
     margin-right: 85px;
     display: flex;
