@@ -34,7 +34,7 @@ const userReducer = createSlice({
   name: 'user',
   initialState: {
     user: {},
-    isAuth: true,
+    isAuth: false,
     isLoading: false,
     isError: false,
     status: 'not started',

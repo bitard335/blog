@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Header from '../header/header';
 import ArticlePage from '../pages/articlePage/articlePage';
@@ -38,7 +38,7 @@ const App = () => {
           }
         />
         <Route path="/editProfile" element={<EditProfilePage />} />
-        <Route path="*" Component={() => <h2>Page does not found</h2>} />
+        <Route path="*" element={<Navigate to="/articles" />} />
       </Routes>
     </div>
   );
